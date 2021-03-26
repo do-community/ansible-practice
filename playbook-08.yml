@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: creates sammy's file
+      become_user: sammy
+      file:
+        path: /tmp/ansible_sammy
+        state: touch
+
+    - name: creates erika's file
+      become_user: erika
+      file:
+        path: /tmp/ansible_erika
+        state: touch

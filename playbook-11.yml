@@ -15,4 +15,9 @@
         src: files/landing-page.html.j2
         dest: /var/www/html/index.nginx-debian.html
 
+    - name: Allow all access to tcp port 80
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp    
 

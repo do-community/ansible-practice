@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    page_title: My Second Landing Page
+    page_description: This is my second landing page description.
+    doc_root: /var/www/mypage
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: latest
+
+    - name: Make sure new doc root exists
+      file:
+        path: "{{ doc_root }}"
+        state: directory
+        mode: '0755'
+
+    - name: Apply Page Template
+      template:
+        src: files/landing-page.html.j2
+        dest: "{{ doc_root }}/index.html"
+
+    - name: Replace document root on default Nginx configuration
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: '(\s+)root /var/www/html;(\s+.*)?$'
+        replace: \g<1>root {{ doc_root }};\g<2>
+        #validate: nginx -c %s -t
+      notify: Restart Nginx
+
+    - name: Allow all access to tcp port 80
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+

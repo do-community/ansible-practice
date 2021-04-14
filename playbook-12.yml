@@ -28,7 +28,6 @@
         path: /etc/nginx/sites-available/default
         regexp: '(\s+)root /var/www/html;(\s+.*)?$'
         replace: \g<1>root {{ doc_root }};\g<2>
-        #validate: nginx -c %s -t
       notify: Restart Nginx
 
     - name: Allow all access to tcp port 80

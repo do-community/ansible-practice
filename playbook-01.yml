@@ -8,5 +8,5 @@
     - name: copy file to destination
       copy:
         src: /tmp/index.html
-        dest: /tmp/ansible-practice
+        dest: /tmp/devops/ansible-practice
         
